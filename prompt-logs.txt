@@ -1,0 +1,5 @@
+June 17, 2025 chatgpt prompt:
+create an initial readme for my repository (FlashcardPro)
+
+Add Requirements
+Docker installed
