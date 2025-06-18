@@ -5,3 +5,4 @@ Add Requirements
 Docker installed
 
 - how to ignore directories with phpcs using sail
+- update my readme, adding the sail initialization, the composer install and how to use the new lint scripts
