@@ -59,7 +59,9 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
-        ]
+        ],
+        "lint": "phpcs --standard=phpcs.xml",
+        "lint-fix": "phpcbf --standard=phpcs.xml"
     },
     "extra": {
         "laravel": {

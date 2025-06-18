@@ -1,5 +1,7 @@
 June 17, 2025 chatgpt prompt:
-create an initial readme for my repository (FlashcardPro)
+- create an initial readme for my repository (FlashcardPro)
 
 Add Requirements
 Docker installed
+
+- how to ignore directories with phpcs using sail
