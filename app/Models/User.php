@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the decks for the user.
+     */
+    public function decks(): HasMany
+    {
+        return $this->hasMany(Deck::class);
+    }
 }

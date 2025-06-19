@@ -24,3 +24,10 @@ a question string column 255 length,
 an answer text column,
 a public boolean column
 a deck_id foreign key references decks table (id)
+
+- for the card study service do you think I'd need like a studies table with an id, uuid, deck_id columns
+
+ and a study_answers with study_id, flashcard_id, and a got_it_right boolean column ? or is it not necessary ?
+
+June 19, 2025 PHPStorm AI Chat Claude 4 connect.
+- based on my database migrations help me create the models
