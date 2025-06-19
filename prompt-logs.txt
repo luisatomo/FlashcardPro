@@ -6,3 +6,21 @@ Docker installed
 
 - how to ignore directories with phpcs using sail
 - update my readme, adding the sail initialization, the composer install and how to use the new lint scripts
+
+June 18, 2025 chatgpt prompt example:
+
+- i created a migration file for flashcards,
+
+public function up(): void
+    {
+        Schema::create('flashcards', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
+    }
+
+lets add a uuid string column
+a question string column 255 length,
+an answer text column,
+a public boolean column
+a deck_id foreign key references decks table (id)
