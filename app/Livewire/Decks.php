@@ -6,11 +6,14 @@ use App\Actions\CreateDeck;
 use App\Actions\DeleteDeck;
 use App\Actions\UpdateDeck;
 use App\Models\Deck;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Decks extends Component
 {
+    use AuthorizesRequests;
+
     public string $name = '';
     public bool $public = false;
     public Collection $decks;
@@ -37,12 +40,15 @@ class Decks extends Component
         $this->validate();
 
         if ($this->editingId) {
-            $update(Deck::findOrFail($this->editingId), [
+            $deck = Deck::findOrFail($this->editingId);
+            $this->authorize('update', Deck::class);
+            $update($deck, [
                 'name'   => $this->name,
                 'public' => $this->public,
             ]);
             session()->flash('success', 'Deck updated!');
         } else {
+            $this->authorize('create', Deck::class);
             $create([
                 'name'   => $this->name,
                 'public' => $this->public,
@@ -57,7 +63,7 @@ class Decks extends Component
     public function deleteDeck(DeleteDeck $deleteDeck, int $id): void
     {
         $deck = auth()->user()->decks()->findOrFail($id);
-
+        $this->authorize('delete', $deck);
         $deleteDeck($deck);
 
         session()->flash('success', 'Deck deleted successfully.');
