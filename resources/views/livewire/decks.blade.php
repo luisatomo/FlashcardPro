@@ -15,15 +15,26 @@
                     </div>
                 @endif
 
-                <button
-                    wire:click="showCreateForm"
-                    class="mb-4 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
-                >
-                    + Add Deck
-                </button>
+                <div class="flex items-center mb-4 space-x-2">
+                    <button
+                        wire:click="showCreateForm"
+                        class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                        + Add Deck
+                    </button>
+
+                    @if ($showForm)
+                        <button
+                            wire:click="$set('showForm', false)"
+                            class="ml-3 px-4 py-2 text-gray-600 hover:underline text-sm"
+                        >
+                            Cancel
+                        </button>
+                    @endif
+                </div>
 
                 @if ($showForm)
-                    <form wire:submit.prevent="createDeck" class="space-y-4 p-4 bg-gray-50 border border-gray-200 rounded-md shadow-sm">
+                    <form wire:submit.prevent="saveDeck" class="space-y-4 p-4 bg-gray-50 border border-gray-200 rounded-md shadow-sm">
 
                         <div class="py-3">
                             <label for="deck-name" class="block text-sm font-medium text-gray-700">
@@ -58,7 +69,7 @@
                                 type="submit"
                                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
-                                + Create Deck
+                                {{ $editingId ? 'Update Deck' : '+ Create Deck' }}
                             </button>
                         </div>
 
@@ -75,6 +86,21 @@
                                 </div>
                                 <div class="text-xs text-gray-400">
                                     {{ $deck->public ? 'Public' : 'Private' }}
+                                </div>
+                                <div>
+                                <button
+                                    wire:click="showEditForm({{ $deck->id }})"
+                                    class="text-gray-500 hover:underline text-sm"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    wire:click="deleteDeck({{ $deck->id }})"
+                                    onclick="return confirm('Are you sure you want to delete this deck?')"
+                                    class="ml-3 text-red-600 hover:underline text-sm"
+                                >
+                                    Delete
+                                </button>
                                 </div>
                             </div>
                         @endforeach

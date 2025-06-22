@@ -1,5 +1,4 @@
 <?php
-// app/Actions/CreateDeck.php
 
 declare(strict_types=1);
 
@@ -13,15 +12,6 @@ use Illuminate\Support\Str;
 
 final class CreateDeck
 {
-    /**
-     * Crea un deck y lo asocia al usuario dado (o al usuario autenticado).
-     *
-     * @param  array{
-     *     name: string,
-     *     public?: bool,
-     *     user?: \App\Models\User
-     * }  $data
-     */
     public function __invoke(array $data): Deck
     {
         /** @var User $user */
@@ -32,7 +22,7 @@ final class CreateDeck
                 'uuid'   => Str::uuid()->toString(),
                 'name'   => $data['name'],
                 'public' => $data['public'] ?? false,
-                'user_id'=> $user->id,
+                'user_id' => $user->id,
             ]);
         });
     }
