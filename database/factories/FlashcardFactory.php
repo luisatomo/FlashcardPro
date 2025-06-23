@@ -3,17 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Deck;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Deck>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Flashcard>
  */
-class DeckFactory extends Factory
+class FlashcardFactory extends Factory
 {
-    protected $model = Deck::class;
-
     /**
      * Define the model's default state.
      *
@@ -22,16 +18,16 @@ class DeckFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => (string) Str::uuid(),
-            'name' => $this->faker->words(3, true) . ' Deck',
+            'uuid' => $this->faker->uuid(),
+            'question' => $this->faker->sentence() . '?',
+            'answer' => $this->faker->paragraph(),
             'public' => $this->faker->boolean(30), // 30% chance of being public
-            'user_id' => User::factory(),
-
+            'deck_id' => Deck::factory(),
         ];
     }
 
     /**
-     * Indicate that the deck should be public.
+     * Indicate that the flashcard should be public.
      */
     public function public(): static
     {
@@ -41,7 +37,7 @@ class DeckFactory extends Factory
     }
 
     /**
-     * Indicate that the deck should be private.
+     * Indicate that the flashcard should be private.
      */
     public function private(): static
     {
@@ -51,34 +47,35 @@ class DeckFactory extends Factory
     }
 
     /**
-     * Set a custom name for the deck.
+     * Create a flashcard for a specific deck.
      */
-    public function withName(string $name): static
+    public function forDeck(Deck $deck): static
     {
         return $this->state(fn (array $attributes) => [
-            'name' => $name,
+            'deck_id' => $deck->id,
         ]);
     }
 
     /**
-     * Create a deck for a specific user.
+     * Create a simple flashcard with short question and answer.
      */
-    public function forUser(User $user): static
+    public function simple(): static
     {
         return $this->state(fn (array $attributes) => [
-            'user_id' => $user->id,
+            'question' => $this->faker->sentence(3) . '?',
+            'answer' => $this->faker->word(),
         ]);
     }
 
     /**
-     * Create a deck with a specific UUID.
+     * Create a language learning flashcard.
      */
-    public function withUuid(string $uuid): static
+    public function language(): static
     {
         return $this->state(fn (array $attributes) => [
-            'uuid' => $uuid,
+            'question' => 'What does "' . $this->faker->word() . '" mean?',
+            'answer' => $this->faker->sentence(),
         ]);
     }
-
 
 }

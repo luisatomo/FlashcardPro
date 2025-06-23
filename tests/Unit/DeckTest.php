@@ -69,7 +69,7 @@ class DeckTest extends TestCase
         $this->assertEquals($user->id, $deck->user->id);
     }
 
-    /*public function test_deck_has_many_flashcards(): void
+    public function test_deck_has_many_flashcards(): void
     {
         $deck = Deck::factory()->create();
         $flashcard1 = Flashcard::factory()->create(['deck_id' => $deck->id]);
@@ -77,7 +77,7 @@ class DeckTest extends TestCase
 
         $this->assertCount(2, $deck->flashcards);
         $this->assertInstanceOf(Flashcard::class, $deck->flashcards->first());
-    }*/
+    }
 
     public function test_deck_uses_uuid_as_route_key(): void
     {
@@ -98,13 +98,13 @@ class DeckTest extends TestCase
         $this->assertEquals($publicDeck->id, $publicDecks->first()->id);
     }
 
-    /*public function test_deck_flashcard_count_attribute(): void
+    public function test_deck_flashcard_count_attribute(): void
     {
         $deck = Deck::factory()->create();
         Flashcard::factory()->count(3)->create(['deck_id' => $deck->id]);
 
         $this->assertEquals(3, $deck->flashcard_count);
-    }*/
+    }
 
     public function test_flashcard_count_is_zero_for_empty_deck(): void
     {

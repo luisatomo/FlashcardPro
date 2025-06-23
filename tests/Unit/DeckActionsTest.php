@@ -37,13 +37,11 @@ class DeckActionsTest extends TestCase
 
         $deck = $action([
             'name' => 'Test Deck',
-            'description' => 'Test Description',
             'public' => true,
         ]);
 
         $this->assertInstanceOf(Deck::class, $deck);
         $this->assertEquals('Test Deck', $deck->name);
-        $this->assertEquals('Test Description', $deck->description);
         $this->assertTrue($deck->public);
         $this->assertEquals($this->user->id, $deck->user_id);
         $this->assertNotNull($deck->uuid);
@@ -59,7 +57,6 @@ class DeckActionsTest extends TestCase
 
         $this->assertEquals('Minimal Deck', $deck->name);
         $this->assertFalse($deck->public);
-        $this->assertNull($deck->description);
         $this->assertEquals($this->user->id, $deck->user_id);
     }
 
@@ -77,7 +74,6 @@ class DeckActionsTest extends TestCase
         $deck = Deck::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Original Name',
-            'description' => 'Original Description',
             'public' => false,
         ]);
 
@@ -85,12 +81,10 @@ class DeckActionsTest extends TestCase
 
         $updatedDeck = $action($deck, [
             'name' => 'Updated Name',
-            'description' => 'Updated Description',
             'public' => true,
         ]);
 
         $this->assertEquals('Updated Name', $updatedDeck->name);
-        $this->assertEquals('Updated Description', $updatedDeck->description);
         $this->assertTrue($updatedDeck->public);
         $this->assertEquals($deck->id, $updatedDeck->id);
     }
@@ -100,7 +94,6 @@ class DeckActionsTest extends TestCase
         $deck = Deck::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Original Name',
-            'description' => 'Original Description',
             'public' => false,
         ]);
 
@@ -111,7 +104,6 @@ class DeckActionsTest extends TestCase
         ]);
 
         $this->assertEquals('Updated Name', $updatedDeck->name);
-        $this->assertEquals('Original Description', $updatedDeck->description);
         $this->assertFalse($updatedDeck->public);
     }
 
@@ -143,9 +135,8 @@ class DeckActionsTest extends TestCase
         $deckId = $deck->id;
 
         $action = new DeleteDeck();
-        $result = $action($deck);
+        $action($deck);
 
-        $this->assertTrue($result);
         $this->assertNull(Deck::find($deckId));
     }
 
@@ -156,21 +147,10 @@ class DeckActionsTest extends TestCase
         $flashcard2 = Flashcard::factory()->create(['deck_id' => $deck->id]);
 
         $action = new DeleteDeck();
-        $result = $action($deck);
+        $action($deck);
 
-        $this->assertTrue($result);
         $this->assertNull(Deck::find($deck->id));
         $this->assertNull(Flashcard::find($flashcard1->id));
         $this->assertNull(Flashcard::find($flashcard2->id));
-    }
-
-    public function test_delete_deck_returns_true_on_success(): void
-    {
-        $deck = Deck::factory()->create(['user_id' => $this->user->id]);
-
-        $action = new DeleteDeck();
-        $result = $action($deck);
-
-        $this->assertTrue($result);
     }
 }

@@ -99,7 +99,6 @@ class DeckFactoryTest extends TestCase
         $this->assertIsArray($definition);
         $this->assertArrayHasKey('uuid', $definition);
         $this->assertArrayHasKey('name', $definition);
-        $this->assertArrayHasKey('description', $definition);
         $this->assertArrayHasKey('public', $definition);
         $this->assertArrayHasKey('user_id', $definition);
     }

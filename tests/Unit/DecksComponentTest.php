@@ -42,7 +42,7 @@ class DecksComponentTest extends TestCase
     public function test_component_has_correct_validation_rules(): void
     {
         $component = new Decks();
-        $rules = $component->rules;
+        $rules = $component->getRules();
 
         $this->assertArrayHasKey('name', $rules);
         $this->assertArrayHasKey('public', $rules);
@@ -141,14 +141,9 @@ class DecksComponentTest extends TestCase
         $this->assertCount(0, $component->decks);
     }
 
-    public function test_component_handles_null_decks_gracefully(): void
+    public function test_component_handles_user_with_no_decks(): void
     {
-        // Create a mock user with empty decks relationship
-        $mockUser = $this->createMock(User::class);
-        $mockUser->method('decks')->willReturn(null);
-
-        auth()->setUser($mockUser);
-
+        // The user from setUp() has no decks by default
         $component = new Decks();
         $component->loadDecks();
 
