@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Decks;
+use App\Livewire\Flashcards;
 
 Route::redirect('/', '/login');
 
@@ -10,6 +11,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('dashboard');
     Route::get('decks', Decks::class)
         ->name('decks');
+    Route::get('decks/{deck}/flashcards', Flashcards::class)
+        ->name('flashcards');
 });
 
 Route::view('profile', 'profile')

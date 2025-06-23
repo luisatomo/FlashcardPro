@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('My Decks') }}
+        {{ $deck->name }}
     </h2>
 </x-slot>
 
@@ -20,7 +20,7 @@
                         wire:click="showCreateForm"
                         class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
                     >
-                        + Add Deck
+                        + Add Card
                     </button>
 
                     @if ($showForm)
@@ -33,9 +33,9 @@
                     @endif
                 </div>
 
-                @include('livewire.forms.deck-form')
+                @include('livewire.forms.flashcard-form')
 
-                @include('livewire.lists.deck-list')
+                @include('livewire.lists.flashcard-list')
             </div>
         </div>
     </div>

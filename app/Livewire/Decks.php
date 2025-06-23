@@ -41,7 +41,7 @@ class Decks extends Component
 
         if ($this->editingId) {
             $deck = Deck::findOrFail($this->editingId);
-            $this->authorize('update', Deck::class);
+            $this->authorize('update', $deck);
             $update($deck, [
                 'name'   => $this->name,
                 'public' => $this->public,
