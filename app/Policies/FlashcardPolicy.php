@@ -54,7 +54,7 @@ class FlashcardPolicy
      */
     public function restore(User $user, Flashcard $flashcard): bool
     {
-        return $user->id === $flashcard->deck()->user_id;
+        return $user->id === $flashcard->deck->user_id;
     }
 
     /**
@@ -62,6 +62,6 @@ class FlashcardPolicy
      */
     public function forceDelete(User $user, Flashcard $flashcard): bool
     {
-        return $user->id === $flashcard->deck()->user_id;
+        return $user->id === $flashcard->deck->user_id;
     }
 }

@@ -43,7 +43,6 @@ class Flashcards extends Component
     public function saveFlashcard(CreateFlashcard $create, UpdateFlashcard $update): void
     {
         $this->validate();
-        $flashcard = new Flashcard();
 
         if ($this->editingId) {
             $flashcard = Flashcard::findOrFail($this->editingId);

@@ -79,6 +79,4 @@ class DeckFactory extends Factory
             'uuid' => $uuid,
         ]);
     }
-
-
 }

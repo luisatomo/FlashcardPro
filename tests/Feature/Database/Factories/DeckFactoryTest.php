@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature\Database\Factories;
 
 use App\Models\Deck;
 use App\Models\User;

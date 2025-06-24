@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Feature\Livewire;
 
 use App\Livewire\Decks;
 use App\Models\Deck;
@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 
-class DecksComponentTest extends TestCase
+class DecksTest extends TestCase
 {
     use RefreshDatabase;
 

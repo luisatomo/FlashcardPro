@@ -77,5 +77,4 @@ class FlashcardFactory extends Factory
             'answer' => $this->faker->sentence(),
         ]);
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Feature\Model;
 
 use App\Models\Deck;
 use App\Models\Flashcard;

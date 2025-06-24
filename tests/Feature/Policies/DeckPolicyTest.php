@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Feature\Policies;
 
 use App\Models\Deck;
 use App\Models\User;
