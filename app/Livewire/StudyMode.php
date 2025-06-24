@@ -12,12 +12,10 @@ class StudyMode extends Component
 {
     use AuthorizesRequests;
 
-    public string $question = '';
-    public string $answer = '';
     public int $current = 0;
     public int $score = 0;
     public Collection $flashcards;
-    public bool $showAnswer = false;
+    public bool $displayedAnswer = false;
     public Deck $deck;
 
     public function mount(Deck $deck): void
@@ -33,7 +31,21 @@ class StudyMode extends Component
 
     public function showAnswer(): void
     {
-        $this->showAnswer = true;
+        $this->displayedAnswer = true;
+    }
+
+    public function incrementScore(bool $correct): void
+    {
+        if ($correct) {
+            $this->score = $this->score + 1;
+        }
+        $this->current = $this->current + 1;
+        $this->clearAnswer();
+    }
+
+    public function clearAnswer(): void
+    {
+        $this->displayedAnswer = false;
     }
 
     public function render()
