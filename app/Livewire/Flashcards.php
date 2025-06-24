@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Actions\CreateFlashcard;
 use App\Actions\DeleteFlashcard;
 use App\Actions\UpdateFlashcard;
+use App\Livewire\Forms\FlashcardForm;
 use App\Models\Deck;
 use App\Models\Flashcard;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -15,57 +16,42 @@ class Flashcards extends Component
 {
     use AuthorizesRequests;
 
-    public string $question = '';
-    public string $answer = '';
-    public bool $public = false;
+    public FlashcardForm $form;
     public Collection $flashcards;
     public bool $showForm = false;
-    public ?int $editingId  = null;
     public Deck $deck;
-
-    protected array $rules = [
-        'question'   => 'required|string|min:3|max:255',
-        'answer'   => 'required|string|min:2',
-        'public' => 'boolean',
-    ];
 
     public function mount(Deck $deck): void
     {
+        $this->form->setDeck($deck);
         $this->deck = $deck;
         $this->loadFlashcards();
     }
 
     public function loadFlashcards(): void
     {
-        $this->flashcards = $this->deck->flashcards()->latest()->get() ?? collect();
+        $this->flashcards = $this->form->deck->flashcards()->latest()->get() ?? collect();
     }
 
     public function saveFlashcard(CreateFlashcard $create, UpdateFlashcard $update): void
     {
-        $this->validate();
+        $this->form->validate();
+        $sanitizedData = $this->form->getSanitizedData();
 
-        if ($this->editingId) {
-            $flashcard = Flashcard::findOrFail($this->editingId);
+        if ($this->form->editingId) {
+            $flashcard = Flashcard::findOrFail($this->form->editingId);
             $this->authorize('update', $flashcard);
-            $update($flashcard, [
-                'question'   => $this->question,
-                'answer' => $this->answer,
-                'public' => $this->public,
-            ]);
+            $update($flashcard, $sanitizedData);
             session()->flash('success', 'Card updated!');
         } else {
-            $this->authorize('create', [Flashcard::class, $this->deck]);
-            $create([
-                'question'   => $this->question,
-                'answer' => $this->answer,
-                'public' => $this->public,
-                'deck' => $this->deck,
-            ]);
+            $this->authorize('create', [Flashcard::class, $this->form->deck]);
+            $create($sanitizedData);
             session()->flash('success', 'Card created!');
         }
 
         $this->cancelForm();
         $this->loadFlashcards();
+        $this->showForm = false;
     }
 
     public function deleteFlashcard(DeleteFlashcard $deleteFlashcard, int $id): void
@@ -87,16 +73,19 @@ class Flashcards extends Component
     public function showEditForm(int $flashcardId): void
     {
         $flashcard             = Flashcard::findOrFail($flashcardId);
-        $this->question       = $flashcard->question;
-        $this->answer       = $flashcard->answer;
-        $this->public     = $flashcard->public;
-        $this->editingId  = $flashcard->id;
+        $this->form->fill([
+            'question' => $flashcard->question,
+            'answer' => $flashcard->answer,
+            'public' => $flashcard->public,
+            'id' => $flashcard->id,
+        ]);
         $this->showForm   = true;
     }
 
     public function cancelForm(): void
     {
-        $this->reset(['question', 'public', 'answer', 'editingId', 'showForm']);
+        $this->form->reset();
+        $this->form->setDeck($this->deck);
     }
 
     public function render()

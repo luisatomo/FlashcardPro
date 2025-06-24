@@ -24,6 +24,7 @@ export default {
             white: colors.white,
             gray: colors.gray,
             green: colors.green,
+            red: colors.red,
         },
     },
 

@@ -7,12 +7,12 @@
             </label>
             <input
                 id="flashcard-question"
-                wire:model.defer="question"
+                wire:model.defer="form.question"
                 type="text"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="e.g. Question?"
             >
-            @error('name')
+            @error('form.question')
             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
@@ -23,12 +23,12 @@
             </label>
             <input
                 id="flashcard-answer"
-                wire:model.defer="answer"
+                wire:model.defer="form.answer"
                 type="text"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="e.g. Answer"
             >
-            @error('name')
+            @error('form.answer')
             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
@@ -37,7 +37,7 @@
             <input
                 type="checkbox"
                 id="flashcard-public"
-                wire:model.defer="public"
+                wire:model.defer="form.public"
                 class="h-4 w-4 text-indigo-600 border-gray-300 rounded"
             >
             <label for="flashcard-public" class="ml-3 block text-sm text-gray-700">
@@ -50,7 +50,7 @@
                 type="submit"
                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-                {{ $editingId ? 'Update Flashcard' : '+ Create Flashcard' }}
+                {{ $form->editingId ? 'Update Flashcard' : '+ Create Flashcard' }}
             </button>
         </div>
 
