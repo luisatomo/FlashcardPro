@@ -11,6 +11,9 @@ The primary interface is built using Laravel and Laravel Livewire.
 ## PHP & Laravel Versions
 PHP: 8.4  
 Laravel: v12 latest version
+Breeze for Authentication
+Sanctum for API authentication
+Breeze:livewire package for visuals.
 
 ## Requirements
 
@@ -89,3 +92,7 @@ All AI-generated code suggestions were thoroughly reviewed, tested, and adapted 
 
 
 > Challenge for me was the use of Livewire, as I haven't used it in the past. Symfony has stimulus but I haven't used it either as I'm experienced with VueJS but I liked Livewire, so now I learned that with the help of AI and Laravel docs.
+
+## Swagger doc for API endpoints.
+> I created a swagger doc at [domain/ip]/api-doc.html so you can test the api endpoints with the api authentication, you will find a login endpoint and 2 api endpoints.
+> I'm also pushing the repo to flashcardpro.atomoweb.com so you can test it on a real server.
