@@ -72,7 +72,9 @@ Breeze:livewire package for visuals.
       ```bash
       ./vendor/bin/sail composer lint-fix
       ```
-8. ./vendor/bin/sail npm run dev or ./vendor/bin/sail npm run build
+8. ./vendor/bin/sail npm run install
+      
+9. ./vendor/bin/sail npm run dev
 > For the architectural decisions, I initially drew from my experience working on previous Domain-Driven Design (DDD) Laravel projects. However, given the smaller scope of this project, I started with a minimalistic approach. As the project evolved, I iteratively refactored the code, gradually separating responsibilities into multiple files for better organization and readability. This refactoring process also required adjustments to the test suite to ensure everything remained aligned and functional as the project grew. For the database structure, I took an old-school approach and sketched the Entity-Relationship Diagram (ERD) with pencil, which helped me visualize relationships and structure before implementation. This approach allowed the application architecture to evolve naturally while accommodating the requirements of the project.
 
 ## AI Tool Usage Disclosure
