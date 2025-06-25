@@ -62,7 +62,7 @@ class FlashcardFactory extends Factory
     public function simple(): static
     {
         return $this->state(fn (array $attributes) => [
-            'question' => $this->faker->sentence(3) . '?',
+            'question' => ucfirst($this->faker->words(3, true)) . '?',
             'answer' => $this->faker->word(),
         ]);
     }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Feature\Livewire;
+namespace Tests\Feature\Livewire;
 
 use App\Livewire\Decks;
 use App\Models\Deck;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class DecksTest extends TestCase
@@ -24,130 +24,124 @@ class DecksTest extends TestCase
         $this->actingAs($this->user);
 
         // Mock authorization for unit testing
-        Gate::define('create', fn ($user, $model) => true);
-        Gate::define('update', fn ($user, $deck) => true);
-        Gate::define('delete', fn ($user, $deck) => true);
+        Gate::define('create', fn (User $user, $model) => true);
+        Gate::define('update', fn (User $user, Deck $deck) => $user->id === $deck->user_id);
+        Gate::define('delete', fn (User $user, Deck $deck) => $user->id === $deck->user_id);
     }
 
-    public function test_component_has_correct_initial_state(): void
+    public function test_renders_successfully()
     {
-        $component = new Decks();
-
-        $this->assertEquals('', $component->name);
-        $this->assertFalse($component->public);
-        $this->assertFalse($component->showForm);
-        $this->assertNull($component->editingId);
+        Livewire::test(Decks::class)
+            ->assertStatus(200);
     }
 
-    public function test_component_has_correct_validation_rules(): void
+    public function test_mount_loads_user_decks()
     {
-        $component = new Decks();
-        $rules = $component->getRules();
+        Deck::factory()->count(2)->create(['user_id' => $this->user->id]);
+        Deck::factory()->count(3)->create(); // Other user's decks
 
-        $this->assertArrayHasKey('name', $rules);
-        $this->assertArrayHasKey('public', $rules);
-        $this->assertEquals('required|string|min:3|max:100', $rules['name']);
-        $this->assertEquals('boolean', $rules['public']);
+        Livewire::test(Decks::class)
+            ->assertCount('decks', 2);
     }
 
-    public function test_load_decks_method_loads_user_decks(): void
+    public function test_it_hides_form_by_default()
     {
-        $deck1 = Deck::factory()->create(['user_id' => $this->user->id]);
-        $deck2 = Deck::factory()->create(['user_id' => $this->user->id]);
-
-        // Create deck for another user
-        $otherUser = User::factory()->create();
-        Deck::factory()->create(['user_id' => $otherUser->id]);
-
-        $component = new Decks();
-        $component->mount();
-
-        $this->assertInstanceOf(Collection::class, $component->decks);
-        $this->assertCount(2, $component->decks);
-        $this->assertTrue($component->decks->pluck('id')->contains($deck1->id));
-        $this->assertTrue($component->decks->pluck('id')->contains($deck2->id));
+        Livewire::test(Decks::class)
+            ->assertSet('showForm', false);
     }
 
-    public function test_show_create_form_sets_correct_state(): void
+    public function test_it_shows_create_form()
     {
-        $component = new Decks();
-        $component->name = 'Previous Name';
-        $component->public = true;
-        $component->editingId = 123;
-        $component->showForm = false;
-
-        $component->showCreateForm();
-
-        $this->assertTrue($component->showForm);
-        $this->assertEquals('', $component->name);
-        $this->assertFalse($component->public);
-        $this->assertNull($component->editingId);
+        Livewire::test(Decks::class)
+            ->call('showCreateForm')
+            ->assertSet('showForm', true)
+            ->assertSet('form.name', '')
+            ->assertSet('form.public', false)
+            ->assertSet('form.editingId', null);
     }
 
-    public function test_show_edit_form_sets_correct_state(): void
+    public function test_it_shows_edit_form_with_data()
     {
-        $deck = Deck::factory()->create([
+        $deck = Deck::factory()->create(['user_id' => $this->user->id]);
+
+        Livewire::test(Decks::class)
+            ->call('showEditForm', $deck->id)
+            ->assertSet('showForm', true)
+            ->assertSet('form.name', $deck->name)
+            ->assertSet('form.public', $deck->public)
+            ->assertSet('form.editingId', $deck->id);
+    }
+
+    public function test_it_creates_deck_successfully()
+    {
+        Livewire::test(Decks::class)
+            ->set('form.name', 'New Deck')
+            ->set('form.public', true)
+            ->call('saveDeck')
+            ->assertSet('showForm', false);
+
+        $this->assertDatabaseHas('decks', [
             'user_id' => $this->user->id,
-            'name' => 'Test Deck',
+            'name' => 'New Deck',
             'public' => true,
         ]);
-
-        $component = new Decks();
-        $component->showEditForm($deck->id);
-
-        $this->assertTrue($component->showForm);
-        $this->assertEquals('Test Deck', $component->name);
-        $this->assertTrue($component->public);
-        $this->assertEquals($deck->id, $component->editingId);
     }
 
-    public function test_cancel_form_resets_all_fields(): void
+    public function test_it_updates_deck_successfully()
     {
-        $component = new Decks();
-        $component->name = 'Test Name';
-        $component->public = true;
-        $component->editingId = 123;
-        $component->showForm = true;
+        $deck = Deck::factory()->create(['user_id' => $this->user->id]);
 
-        $component->cancelForm();
+        Livewire::test(Decks::class)
+            ->call('showEditForm', $deck->id)
+            ->set('form.name', 'Updated Deck Name')
+            ->call('saveDeck')
+            ->assertSet('showForm', false);
 
-        $this->assertEquals('', $component->name);
-        $this->assertFalse($component->public);
-        $this->assertNull($component->editingId);
-        $this->assertFalse($component->showForm);
+        $this->assertDatabaseHas('decks', [
+            'id' => $deck->id,
+            'name' => 'Updated Deck Name',
+        ]);
     }
 
-    public function test_component_uses_correct_view(): void
+    public function test_it_deletes_deck_successfully()
     {
-        $component = new Decks();
-        $view = $component->render();
+        $deck = Deck::factory()->create(['user_id' => $this->user->id]);
+        $this->assertDatabaseCount('decks', 1);
 
-        $this->assertEquals('livewire.decks', $view->name());
+        Livewire::test(Decks::class)
+            ->call('deleteDeck', $deck->id);
+
+        $this->assertDatabaseCount('decks', 0);
     }
 
-    public function test_component_uses_authorizes_requests_trait(): void
+    public function test_validation_fails_for_empty_name()
     {
-        $component = new Decks();
-
-        $this->assertTrue(method_exists($component, 'authorize'));
+        Livewire::test(Decks::class)
+            ->set('form.name', '')
+            ->call('saveDeck')
+            ->assertHasErrors(['form.name' => 'required']);
     }
 
-    public function test_component_initializes_with_empty_collection(): void
+    public function test_unauthorized_user_cannot_update_deck()
     {
-        $component = new Decks();
-        $component->decks = collect();
+        $otherUser = User::factory()->create();
+        $deck = Deck::factory()->create(['user_id' => $otherUser->id]);
 
-        $this->assertInstanceOf(Collection::class, $component->decks);
-        $this->assertCount(0, $component->decks);
+        Livewire::test(Decks::class)
+            // Manually set the form state to test the saveDeck authorization
+            ->set('form.editingId', $deck->id)
+            ->set('form.name', 'Unauthorized Update')
+            ->call('saveDeck')
+            ->assertForbidden();
     }
 
-    public function test_component_handles_user_with_no_decks(): void
+    public function test_unauthorized_user_cannot_delete_deck()
     {
-        // The user from setUp() has no decks by default
-        $component = new Decks();
-        $component->loadDecks();
+        $otherUser = User::factory()->create();
+        $deck = Deck::factory()->create(['user_id' => $otherUser->id]);
 
-        $this->assertInstanceOf(Collection::class, $component->decks);
-        $this->assertCount(0, $component->decks);
+        Livewire::test(Decks::class)
+            ->call('deleteDeck', $deck->id)
+            ->assertForbidden();
     }
 }

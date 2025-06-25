@@ -47,12 +47,11 @@ class Decks extends Component
 
         $this->cancelForm();
         $this->loadDecks();
-        $this->showForm = false;
     }
 
     public function deleteDeck(DeleteDeck $deleteDeck, int $id): void
     {
-        $deck = auth()->user()->decks()->findOrFail($id);
+        $deck = Deck::findOrFail($id);
         $this->authorize('delete', $deck);
         $deleteDeck($deck);
 
@@ -62,13 +61,14 @@ class Decks extends Component
 
     public function showCreateForm(): void
     {
-        $this->cancelForm();
+        $this->form->reset();
         $this->showForm = true;
     }
 
     public function showEditForm(int $deckId): void
     {
-        $deck = Deck::whereKey($deckId)->whereBelongsTo(auth()->user())->firstOrFail();
+        $deck = Deck::findOrFail($deckId);
+        $this->authorize('update', $deck);
 
         $this->form->fill([
             'name' => $deck->name,
@@ -82,6 +82,7 @@ class Decks extends Component
     public function cancelForm(): void
     {
         $this->form->reset();
+        $this->showForm = false;
     }
 
     public function render()

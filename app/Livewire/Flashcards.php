@@ -51,7 +51,6 @@ class Flashcards extends Component
 
         $this->cancelForm();
         $this->loadFlashcards();
-        $this->showForm = false;
     }
 
     public function deleteFlashcard(DeleteFlashcard $deleteFlashcard, int $id): void
@@ -72,7 +71,8 @@ class Flashcards extends Component
 
     public function showEditForm(int $flashcardId): void
     {
-        $flashcard             = Flashcard::findOrFail($flashcardId);
+        $flashcard = Flashcard::findOrFail($flashcardId);
+        $this->authorize('update', $flashcard);
         $this->form->fill([
             'question' => $flashcard->question,
             'answer' => $flashcard->answer,
@@ -86,6 +86,7 @@ class Flashcards extends Component
     {
         $this->form->reset();
         $this->form->setDeck($this->deck);
+        $this->showForm = false;
     }
 
     public function render()
