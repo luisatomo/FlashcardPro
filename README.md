@@ -1,25 +1,40 @@
+
 # FlashcardPro
 
-This application allows users to create, manage, and study flashcards.  
-The primary interface is built using Laravel and Laravel Livewire.
+FlashcardPro is a Laravel-based web application that allows users to create, manage, and study flashcards.  
+The main interface is built using **Laravel**, **Livewire**, and **TailwindCSS**.
 
-## Developer Information
+---
+
+## 👨‍💻 Developer Information
 
 **Name:** Luis Mendoza  
 **Email:** luis@atomoweb.com
 
-## PHP & Laravel Versions
-PHP: 8.4  
-Laravel: v12 latest version
-Breeze for Authentication
-Sanctum for API authentication
-Breeze:livewire package for visuals.
+---
 
-## Requirements
+## ⚙️ Stack & Tools
+
+- **PHP:** 8.4
+- **Laravel:** v12 (latest)
+- **Laravel Breeze** for authentication
+- **Laravel Sanctum** for API token authentication
+- **Breeze:Livewire** for UI scaffolding
+- **Tailwind CSS** for frontend styling
+- **Docker + Laravel Sail** for local development
+- **Swagger** for API documentation
+
+---
+
+## ✅ Requirements
 
 - Docker installed
+- Node.js and NPM (if not using Sail for frontend)
+- Git
 
-## Getting Started
+---
+
+## 🚀 Getting Started
 
 1. **Clone the repository**
 
@@ -28,9 +43,7 @@ Breeze:livewire package for visuals.
    cd FlashcardPro
    ```
 
-2. **Start Sail**
-
-   From the root of the project:
+2. **Start Laravel Sail**
 
    ```bash
    ./vendor/bin/sail up -d
@@ -42,59 +55,276 @@ Breeze:livewire package for visuals.
    ./vendor/bin/sail composer install
    ```
 
-4. **Run database migrations**
+4. **Copy and configure `.env` file**
 
    ```bash
-   ./vendor/bin/sail artisan migrate
+   cp .env.example .env
+   ./vendor/bin/sail artisan key:generate
    ```
-   
-5. **Run seeds and maybe refresh migrations**
-      ```bash
-      ./vendor/bin/sail artisan migrate:fresh --seed
-      ```
-   
-6. **Run tests**
-      ```bash
-      ./vendor/bin/sail artisan test
-      ```
-      
 
-7. **Run lint scripts**
+   Make sure your database credentials in `.env` match your Docker configuration.
 
-    - To check code style with PSR-12:
+5. **Run migrations and seed data**
+
+   ```bash
+   ./vendor/bin/sail artisan migrate:fresh --seed
+   ```
+
+6. **Install frontend dependencies**
+
+   ```bash
+   ./vendor/bin/sail npm install
+   ./vendor/bin/sail npm run dev
+   ```
+
+7. **Run tests**
+
+   ```bash
+   ./vendor/bin/sail artisan test
+   ```
+
+8. **Linting (optional)**
+
+    - Check code style (PSR-12):
 
       ```bash
       ./vendor/bin/sail composer lint
       ```
 
-    - To automatically fix fixable style issues:
+    - Fix auto-correctable issues:
 
       ```bash
       ./vendor/bin/sail composer lint-fix
       ```
-8. ./vendor/bin/sail npm run install
-      
-9. ./vendor/bin/sail npm run dev
-> For the architectural decisions, I initially drew from my experience working on previous Domain-Driven Design (DDD) Laravel projects. However, given the smaller scope of this project, I started with a minimalistic approach. As the project evolved, I iteratively refactored the code, gradually separating responsibilities into multiple files for better organization and readability. This refactoring process also required adjustments to the test suite to ensure everything remained aligned and functional as the project grew. For the database structure, I took an old-school approach and sketched the Entity-Relationship Diagram (ERD) with pencil, which helped me visualize relationships and structure before implementation. This approach allowed the application architecture to evolve naturally while accommodating the requirements of the project.
 
-## AI Tool Usage Disclosure
+---
 
-This project utilized AI-powered development assistance, specifically Claude (Anthropic's AI assistant), throughout the development process. AI assistance was employed for:
+## 🧠 Architecture Notes
 
-- Code debugging and error resolution
-- Test case generation and validation
-- API endpoint design recommendations
-- Laravel best practices guidance
-- Database query optimization
-- Resource transformation patterns
+> This project was designed iteratively. I began with a minimal approach due to the scope, gradually introducing structure and separating responsibilities as complexity grew.
 
-All AI-generated code suggestions were thoroughly reviewed, tested, and adapted to meet the specific requirements of this FlashcardPro application. The core business logic, architectural decisions, and final implementation choices were made by me, with AI serving as a supplementary development tool.
+- The architecture was inspired by **Domain-Driven Design (DDD)** practices.
+- Early-stage planning included a hand-drawn **Entity Relationship Diagram (ERD)**.
+- Test suites were maintained and updated alongside feature development to ensure code reliability.
 
-**Detailed AI interaction logs are available in `prompt-logs.txt` in the project root for complete transparency.**
+---
+
+## 🤖 AI Tool Usage Disclosure
+
+AI (Claude from Anthropic) was used as a coding assistant for:
+
+- Code debugging
+- Test case generation
+- API design ideas
+- Best practices in Laravel
+- Query optimizations
+- Pattern suggestions
+
+> All AI-generated suggestions were reviewed, adapted, and tested.  
+> Core logic and decisions were authored by me.
+
+📁 `prompt-logs.txt` (in the root) contains a full log of AI-assisted interactions.
+
+---
+
+## 📘 API Documentation (Swagger)
+
+A Swagger UI for API endpoints is available at:
+
+```
+[domain]/api-doc.html
+```
+
+Endpoints include:
+
+- `/api/login`
+- `/api/decks`
+- `/api/flashcards`
+
+Use the **login endpoint** to generate a Bearer token for authenticating subsequent requests.
+
+---
+
+## 🌐 Live Demo
+
+You can access the live application at:
+
+👉 [https://flashcardpro.atomoweb.com](https://flashcardpro.atomoweb.com)
+
+---
+
+## 📌 Notes
+
+> This was my first real experience using **Livewire**, having previously worked mostly with VueJS.  
+> I found Livewire intuitive and enjoyable, and thanks to Laravel docs and AI assistance, I was able to quickly pick it up and implement dynamic features effectively.
+
+---
 
 
-> Challenge for me was the use of Livewire, as I haven't used it in the past. Symfony has stimulus but I haven't used it either as I'm experienced with VueJS but I liked Livewire, so now I learned that with the help of AI and Laravel docs.
+# FlashcardPro
 
-## Swagger doc for API endpoints.
-> I created a swagger doc at [domain/ip]/api-doc.html so you can test the api endpoints with the api authentication, you will find a login endpoint and 2 api endpoints.
-> I'm also pushing the repo to flashcardpro.atomoweb.com so you can test it on a real server.
+FlashcardPro is a Laravel-based web application that allows users to create, manage, and study flashcards.  
+The main interface is built using **Laravel**, **Livewire**, and **TailwindCSS**.
+
+---
+
+## 👨‍💻 Developer Information
+
+**Name:** Luis Mendoza  
+**Email:** luis@atomoweb.com
+
+---
+
+## ⚙️ Stack & Tools
+
+- **PHP:** 8.4
+- **Laravel:** v12 (latest)
+- **Laravel Breeze** for authentication
+- **Laravel Sanctum** for API token authentication
+- **Breeze:Livewire** for UI scaffolding
+- **Tailwind CSS** for frontend styling
+- **Docker + Laravel Sail** for local development
+- **Swagger** for API documentation
+
+---
+
+## ✅ Requirements
+
+- Docker installed
+- Node.js and NPM (if not using Sail for frontend)
+- Git
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+
+   ```bash
+   git clone git@github.com:luisatomo/FlashcardPro.git
+   cd FlashcardPro
+   ```
+
+2. **Start Laravel Sail**
+
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+
+3. **Install PHP dependencies**
+
+   ```bash
+   ./vendor/bin/sail composer install
+   ```
+
+4. **Copy and configure `.env` file**
+
+   ```bash
+   cp .env.example .env
+   ./vendor/bin/sail artisan key:generate
+   ```
+
+   Make sure your database credentials in `.env` match your Docker configuration.
+
+5. **Run migrations and seed data**
+
+   ```bash
+   ./vendor/bin/sail artisan migrate:fresh --seed
+   ```
+
+6. **Install frontend dependencies**
+
+   ```bash
+   ./vendor/bin/sail npm install
+   ./vendor/bin/sail npm run dev
+   ```
+
+7. **Run tests**
+
+   ```bash
+   ./vendor/bin/sail artisan test
+   ```
+
+8. **Linting (optional)**
+
+    - Check code style (PSR-12):
+
+      ```bash
+      ./vendor/bin/sail composer lint
+      ```
+
+    - Fix auto-correctable issues:
+
+      ```bash
+      ./vendor/bin/sail composer lint-fix
+      ```
+
+---
+
+## 🧠 Architecture Notes
+
+> This project was designed iteratively. I began with a minimal approach due to the scope, gradually introducing structure and separating responsibilities as complexity grew.
+
+- The architecture was inspired by **Domain-Driven Design (DDD)** practices.
+- Early-stage planning included a hand-drawn **Entity Relationship Diagram (ERD)**.
+- Test suites were maintained and updated alongside feature development to ensure code reliability.
+
+---
+
+## 🤖 AI Tool Usage Disclosure
+
+AI (Claude from Anthropic) was used as a coding assistant for:
+
+- Code debugging
+- Test case generation
+- API design ideas
+- Best practices in Laravel
+- Query optimizations
+- Pattern suggestions
+
+> All AI-generated suggestions were reviewed, adapted, and tested.  
+> Core logic and decisions were authored by me.
+
+📁 `prompt-logs.txt` (in the root) contains a full log of AI-assisted interactions.
+
+---
+
+## 📘 API Documentation (Swagger)
+
+A Swagger UI for API endpoints is available at:
+
+```
+[domain]/api-doc.html
+```
+
+Endpoints include:
+
+- `/api/login`
+- `/api/decks`
+- `/api/flashcards`
+
+Use the **login endpoint** to generate a Bearer token for authenticating subsequent requests.
+
+---
+
+## 🌐 Live Demo
+
+You can access the live application at:
+
+👉 [https://flashcardpro.atomoweb.com](https://flashcardpro.atomoweb.com)
+👉 [https://flashcardpro.atomoweb.com/api-doc.html](https://flashcardpro.atomoweb.com/api-doc.html)
+---
+
+## 📌 Notes
+
+> This was my first real experience using **Livewire**, having previously worked mostly with VueJS.  
+> I found Livewire intuitive and enjoyable, and thanks to Laravel docs and AI assistance, I was able to quickly pick it up and implement dynamic features effectively.
+
+---
+
+## ✅ Credentials
+
+user: jane@example.com
+password: password
+
+You can find more users in the seed file: database/seeders/UserSeeder.php
