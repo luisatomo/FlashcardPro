@@ -11,6 +11,6 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware(['auth:sanctum', \App\Http\Middleware\DebugRequestLogger::class])->group(function () {
-    Route::get('/last-public-deck', [DeckController::class, 'lastPublic']);;
-    Route::get('/public-flashcards', [FlashcardController::class, 'public']);;
+    Route::get('/last-public-deck', [DeckController::class, 'lastPublic']);
+    Route::get('/public-flashcards', [FlashcardController::class, 'public']);
 });
