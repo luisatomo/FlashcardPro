@@ -1,0 +1,308 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "FlashcardPro API",
+        "description": "API documentation for FlashcardPro application",
+        "version": "1.0.0",
+        "contact": {
+            "name": "FlashcardPro Support"
+        }
+    },
+    "servers": [
+        {
+            "url": "/api",
+            "description": "API Server"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Deck": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Spanish Vocabulary"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Basic Spanish words and phrases"
+                    },
+                    "public": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Flashcard": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "question": {
+                        "type": "string",
+                        "example": "What is the Spanish word for 'hello'?"
+                    },
+                    "answer": {
+                        "type": "string",
+                        "example": "Hola"
+                    },
+                    "public": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "deck_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "jane@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    }
+                }
+            },
+            "RegisterRequest": {
+                "type": "object",
+                "required": ["name", "email", "password", "password_confirmation"],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "example": "password123"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Login user with credentials found: database/seeders/UserSeeder.php",
+                "description": "Authenticate user and return access token",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijklmnopqrstuvwxyz"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/last-public-deck": {
+            "get": {
+                "tags": ["Protected"],
+                "summary": "Get last public deck",
+                "description": "Retrieve the most recently created public deck (requires authentication)",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "debug",
+                        "in": "query",
+                        "description": "Enable debug logging",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "debug"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Last public deck",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "oneOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/Deck"
+                                                },
+                                                {
+                                                    "type": "null"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/public-flashcards": {
+            "get": {
+                "tags": ["Protected"],
+                "summary": "Get public flashcards",
+                "description": "Retrieve all public flashcards (requires authentication)",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "debug",
+                        "in": "query",
+                        "description": "Enable debug logging",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "debug"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of public flashcards",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Flashcard"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "User authentication endpoints"
+        },
+        {
+            "name": "Protected",
+            "description": "Protected endpoints that require authentication but access public data"
+        }
+    ]
+}
