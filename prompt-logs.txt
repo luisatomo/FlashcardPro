@@ -72,3 +72,19 @@ June 21, 2025
   Decided on using __invoke() directly or creating execute() for consistency.
 
   Used Livewire's action pattern correctly for invoking actions via DI.
+
+  This project has utilized AI-powered development assistance tools,
+  specifically Claude (Anthropic's AI assistant),
+  to support various aspects of the development process.
+  AI assistance was employed for code debugging,
+  problem analysis, test writing guidance,
+  resource structure recommendations, and general
+  Laravel development best practices. The AI tools helped identify
+  runtime errors, suggest solutions for null pointer exceptions,
+  recommend proper resource transformation patterns, and provide guidance on
+  API endpoint testing. All AI-generated code suggestions were reviewed,
+  tested, and adapted to fit the specific requirements and architecture of this
+  FlashcardPro Laravel application. The core application logic,
+  business requirements, database design, and final implementation decisions were
+  made by me (Luis), with AI serving as a supplementary tool for troubleshooting and optimization
+
